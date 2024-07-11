@@ -1,0 +1,5 @@
+-r base.txt
+
+drf-spectacular==0.27.2
+django-extensions==3.2.3
+django-silk==5.1.0
