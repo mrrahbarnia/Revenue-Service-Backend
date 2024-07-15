@@ -3,3 +3,5 @@
 drf-spectacular==0.27.2
 django-extensions==3.2.3
 django-silk==5.1.0
+ruff==0.5.2
+django-stubs==5.0.2

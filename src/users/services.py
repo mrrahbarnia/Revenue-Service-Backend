@@ -4,5 +4,5 @@ from .models import BaseUser
 
 logger = logging.getLogger('backend')
 
-# def register_user(email: str, password: str) -> BaseUser:
-#     BaseUser.objects.create_user(email=email, password=password)
+def register_user(email: str, password: str) -> BaseUser:
+    return BaseUser.objects.create_user(email=email, password=password)

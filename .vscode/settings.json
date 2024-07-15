@@ -1,0 +1,15 @@
+{
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "always"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "editors.rulers": [88],
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--config-file=mypy.ini"
+],
+}

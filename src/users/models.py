@@ -1,30 +1,32 @@
 import uuid
 
-from django.db import models
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.base_user import (
-    AbstractBaseUser,
-    BaseUserManager as BUM
-)
-
 from common.models import BaseModel
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import BaseUserManager as BUM
+from django.contrib.auth.models import PermissionsMixin
+from django.db import models
+
 
 def default_security_stamp() -> str:
-    return (str(uuid.uuid4())).split('-')[0]
+    return uuid.uuid4().hex
 
 
 class BaseUserManager(BUM):
-
     def create_user(
-            self, email: str, is_active: bool =True, is_staff: bool = False, password: str = None
-    ) -> 'BaseUser':
+        self,
+        email: str,
+        is_active: bool = True,
+        is_staff: bool = False,
+        password: str | None = None,
+    ) -> "BaseUser":
         """Creating normal users with the given email and password."""
         if not email:
             raise ValueError("Users must have an email address")
 
         user = self.model(
             email=self.normalize_email(email.lower()),
-            is_active=is_active, is_staff=is_staff
+            is_active=is_active,
+            is_staff=is_staff,
         )
 
         if password is not None:
@@ -37,7 +39,7 @@ class BaseUserManager(BUM):
 
         return user
 
-    def create_superuser(self, email: str, password: str = None) -> 'BaseUser':
+    def create_superuser(self, email: str, password: str) -> "BaseUser":
         user = self.create_user(
             email=email,
             is_active=True,
@@ -52,11 +54,10 @@ class BaseUserManager(BUM):
 
 
 class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
-
-    email = models.EmailField(verbose_name='email address', unique=True)
+    email = models.EmailField(verbose_name="email address", unique=True)  # type: ignore
 
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)  # type: ignore
 
     objects = BaseUserManager()
 
