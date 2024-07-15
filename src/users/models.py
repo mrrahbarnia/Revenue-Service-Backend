@@ -6,6 +6,8 @@ from django.contrib.auth.base_user import BaseUserManager as BUM
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from .types import Email, Password
+
 
 def default_security_stamp() -> str:
     return uuid.uuid4().hex
@@ -14,16 +16,16 @@ def default_security_stamp() -> str:
 class BaseUserManager(BUM):
     def create_user(
         self,
-        email: str,
+        email: Email,
         is_active: bool = True,
         is_staff: bool = False,
-        password: str | None = None,
+        password: Password | None = None,
     ) -> "BaseUser":
         """Creating normal users with the given email and password."""
         if not email:
             raise ValueError("Users must have an email address")
 
-        user = self.model(
+        user: BaseUser = self.model(
             email=self.normalize_email(email.lower()),
             is_active=is_active,
             is_staff=is_staff,
@@ -39,7 +41,7 @@ class BaseUserManager(BUM):
 
         return user
 
-    def create_superuser(self, email: str, password: str) -> "BaseUser":
+    def create_superuser(self, email: Email, password: Password) -> "BaseUser":
         user = self.create_user(
             email=email,
             is_active=True,
@@ -63,5 +65,5 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email"
 
-    def __str__(self) -> str:
+    def __str__(self) -> Email:
         return self.email

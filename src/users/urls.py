@@ -1,6 +1,10 @@
-from django.urls import path, include
+from django.urls import path
+
+from . import apis
+
+app_name = "users"
 
 
-# urlpatterns = [
-
-# ]
+urlpatterns = [
+    path("register/", apis.UserRegisterApi.as_view(), name="register"),
+]

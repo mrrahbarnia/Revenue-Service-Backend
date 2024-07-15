@@ -155,13 +155,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "COERCE_DECIMAL_TO_STRING": False,
-    "NON_FIELD_ERRORS_KEY": "message",
+    # "NON_FIELD_ERRORS_KEY": "message",
 }
-
-
-# Redis config
-REDIS_HOST = os.getenv("REDIS_HOST")
-REDIS_PORT = int(os.getenv("REDIS_PORT"))  # type: ignore
 
 
 # Logging config
