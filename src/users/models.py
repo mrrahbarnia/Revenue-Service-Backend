@@ -17,7 +17,7 @@ class BaseUserManager(BUM):
     def create_user(
         self,
         email: Email,
-        is_active: bool = True,
+        is_active: bool = False,
         is_staff: bool = False,
         password: Password | None = None,
     ) -> "BaseUser":
@@ -58,7 +58,7 @@ class BaseUserManager(BUM):
 class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email address", unique=True)  # type: ignore
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)  # type: ignore
 
     objects = BaseUserManager()

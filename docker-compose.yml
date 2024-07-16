@@ -16,6 +16,8 @@ services:
       - ./src/.env
     depends_on:
       - db
+      - redis
+      - rabbitmq
     restart: always
 
   db:
@@ -27,6 +29,19 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=db
       - POSTGRES_PASSWORD=changeme
+  
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    volumes:
+      - redis-data:/data
+  
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
   
   adminer:
     image: adminer

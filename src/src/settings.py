@@ -147,7 +147,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom user path
 AUTH_USER_MODEL = "users.BaseUser"
 
-
 # Django RestFramework config
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -202,3 +201,10 @@ if DEBUG:
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=int(os.getenv("TOKEN_LIFE_TIME"))),  # type: ignore
 }
+
+# Auth config
+VERIFICATION_EMAIL_EXPIRY_SEC = int(os.getenv("VERIFICATION_EMAIL_EXPIRY_SEC")) # type: ignore
+
+# Redis config
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = int(os.getenv('REDIS_PORT')) # type: ignore
