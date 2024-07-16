@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .exceptions import PasswordsNotMatch, InvalidVerificationCode
-from . import services
+from .services import services
 from .validators import letter_validator, number_validator, special_char_validator
 
 
@@ -87,8 +87,8 @@ class UserVerifyAccountApi(APIView):
 
 class UserResendVerificationApi(APIView):
     class ResendVerificationSerializer(serializers.Serializer):
-        email = serializers.CharField()
-    
+        email = serializers.EmailField()
+
     @extend_schema(request=ResendVerificationSerializer)
     def post(self, request: Request) -> Response:
         serializer = self.ResendVerificationSerializer(data=request.data)
@@ -105,7 +105,12 @@ class UserChangePassword(APIView):
     permission_classes = [permissions.IsAuthenticated]
     class ChangePassInSerializer(serializers.Serializer):
         old_password = serializers.CharField()
-        new_password = serializers.CharField()
+        new_password = serializers.CharField(validators=(
+            MinLengthValidator(limit_value=8),
+            number_validator,
+            letter_validator,
+            special_char_validator,  # type: ignore
+        ))
         confirm_password = serializers.CharField()
 
         def validate(self, attrs: dict) -> dict:
@@ -127,4 +132,35 @@ class UserChangePassword(APIView):
         return Response(
             {"message": 'Password changed successfully'}, status=status.HTTP_200_OK
         )
-            
+
+
+class UserResetPasswordApi(APIView):
+    class ResetPasswordSerializer(serializers.Serializer):
+        email = serializers.EmailField()
+    
+    @extend_schema(request=ResetPasswordSerializer)
+    def post(self, request: Request) -> Response:
+        serializer = self.ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        services.user_reset_password(
+            email=serializer.validated_data.get("email")
+        )
+        return Response(
+            {"message": "Random password was sent."}, status=status.HTTP_200_OK
+        )
+
+
+class UserVerifyResetPasswordApi(APIView):
+    class VerifyResetPasswordSerializer(serializers.Serializer):
+        received_password = serializers.CharField()
+    
+    @extend_schema(request=VerifyResetPasswordSerializer)
+    def post(self, request: Request) -> Response:
+        serializer = self.VerifyResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        services.user_verify_reset_password(
+            received_password=serializer.validated_data.get("received_password")
+        )
+        return Response(
+            {"message": "Password reset successfully,Change it to your favorite."}, status=status.HTTP_200_OK
+        )

@@ -26,6 +26,12 @@ class InvalidVerificationCode(APIException):
     default_code = "invalid_verification_code"
 
 
+class InvalidRandomPassword(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Random password is invalid!(Expired or wrong)"
+    default_code = "invalid_random_password"
+
+
 class UserAlreadyVerified(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "User has already been verified!"
