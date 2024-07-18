@@ -202,8 +202,10 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=int(os.getenv("TOKEN_LIFE_TIME"))),  # type: ignore
 }
 
+
 # Auth config
 VERIFICATION_EMAIL_EXPIRY_SEC = int(os.getenv("VERIFICATION_EMAIL_EXPIRY_SEC")) # type: ignore
+
 
 # Redis config
 REDIS_HOST = os.getenv('REDIS_HOST')
